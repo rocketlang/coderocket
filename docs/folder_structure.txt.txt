@@ -1,0 +1,31 @@
+/CodeRocket
+  /docs
+    - folder_structure.txt
+    - notion_template.txt
+    - LICENSE
+    - LICENSE_ASSETS
+    - LICENSE_DOCS
+    - pitch_deck.md
+    - branding_plan.md
+    - roi_section.md
+    - cash_flow.md
+    - ui_styleguide.md
+    - project_update.md
+    - whitepaper.md
+    - one_pager.md
+    - unique_value.md
+    - competitor_comparison.md
+    - code_engine_plan.md
+  /syntax
+    - rules_final.md
+    - language_spec.md
+    - language_guide.md
+    - onboarding_wizard.js
+  /tasks
+    - (Placeholder for future task logs)
+  /ip_collateral
+    - ip_collateral.md
+    - complexity_scorer.md
+    - patent_draft.md
+    - ip_diagrams.md
+    - language_guide.md

@@ -1,0 +1,10 @@
+Creative Commons Attribution-ShareAlike 4.0 International License
+
+Copyright (c) 2025 CodeRocket
+
+This work is licensed under a Creative Commons Attribution-ShareAlike 4.0 International License. You are free to share (copy and redistribute) and adapt (remix, transform, build upon) the material for any purpose, even commercially, under the following terms:
+
+- Attribution: You must give appropriate credit, provide a link to the license, and indicate if changes were made.
+- ShareAlike: If you remix, transform, or build upon the material, you must distribute your contributions under the same license.
+
+Full license: https://creativecommons.org/licenses/by-sa/4.0/
