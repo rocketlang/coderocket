@@ -1,4 +1,4 @@
-# CodeRocket Language Syntax Specification
+﻿# CodeRocket Language Syntax Specification
 
 **Date**: May 5, 2025
 
@@ -32,3 +32,11 @@ The CodeRocket language is a patent-pending, hybrid syntax for laymen and all st
 ## Next Steps
 - Refine syntax post-sprint (May 9, 2025).
 - File patent (June 2025).
+## Complex Commands
+- Spark: show "Hello" → console.log("Hello")
+- Orbit: make function pay: connect razorpay_api → API call
+- Nova: place3d container_stack at 10,10,5 → WebXR render
+## Test Cases
+- Test: dikhao "Namaste" (Spark) → console.log("Namaste")
+- Test: make list inventory (Orbit) → { inventory: [] }
+- Test: animate ship to 200,200 (Nova) → { action: "animate", x: 200, y: 200 }
