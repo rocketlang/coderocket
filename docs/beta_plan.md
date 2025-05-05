@@ -26,3 +26,7 @@ Plan a 50-user beta test for RocketLang in August 2025, using Supabase for cloud
 - Set up Supabase by July 2025 (~2 hr setup).
 - Create onboarding wizard by June 2025 (~10 hr development).
 - Test API endpoints with 50-user data (Aug 2025).
+- ## Printing Features in Beta
+- **Goal**: Test printing commands (`print noon report`, `print voyage plan`) for maritime users.
+- **User Task**: Run `print voyage plan`, confirm output, share feedback in #beta-feedback.
+- **Future**: Add `generate report pdf` for downloadable reports (2026).
