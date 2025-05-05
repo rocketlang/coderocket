@@ -75,3 +75,24 @@ RocketLang aims to integrate an AI layer to assist laymen in generating commands
     const suggestion = model.predict(tf.tensor2d([[/* input */]]));
     console.log(`Suggested: dikhao 'Namaste'`);
   }
+  ## API Framework for RocketLang (Planned)
+
+### Overview
+RocketLang will include an API framework to enable seamless integration with external apps and modules (e.g., payment gateways, IoT devices, third-party maritime apps). This framework will allow laymen to connect RocketLang apps to other systems using simple commands, while providing developers with a structured API for extensibility. The API framework will be developed post-beta (2026), with initial support for RESTful APIs.
+
+### Framework: Express.js (Placeholder)
+- **Use Case**: Create a RESTful API to expose RocketLang app functionality (e.g., journey logs, user data) to external apps.
+- **RocketLang Command**: `make api endpoint logs: return journey_data`
+- **JavaScript Equivalent (Placeholder)**:
+  ```javascript
+  const express = require('express');
+  const app = express();
+  app.use(express.json());
+
+  app.get('/logs', (req, res) => {
+    const db = require('better-sqlite3')('rocketlang.db');
+    const journeyData = db.prepare('SELECT * FROM journey_log').all();
+    res.json(journeyData);
+  });
+
+  app.listen(3000, () => console.log('RocketLang API running on port 3000'));
