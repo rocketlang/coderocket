@@ -1,4 +1,4 @@
-# RocketLang Functionality Mapping and Frameworks
+﻿# RocketLang Functionality Mapping and Frameworks
 
 **Date**: May 7, 2025  
 **Purpose**: This document maps RocketLang commands to Python and JavaScript equivalents, demonstrating how laymen can create apps with RocketLang, and highlights helpful frameworks for extending RocketLang functionality.
@@ -55,4 +55,23 @@ RocketLang apps can be extended with frameworks to add advanced functionality. B
     const { data, error } = await supabase.from('journey_log').insert({ day: 1, lat: 22.7394, lon: 69.6872 });
     if (error) console.log(error);
     return data;
+  }
+  ## AI Layer for RocketLang (Planned)
+
+### Overview
+RocketLang aims to integrate an AI layer to assist laymen in generating commands and apps. The AI will be trained on RocketLang syntax and user inputs (e.g., sailor journey logs, shopkeeper inventory commands) to suggest commands, auto-generate apps, and provide real-time feedback. This feature is planned post-December 2025 funding, with initial training on a small dataset (e.g., 50-user beta data, Aug 2025).
+
+### Framework: TensorFlow.js (Placeholder)
+- **Use Case**: Train a lightweight AI model in the browser to suggest RocketLang commands (e.g., "show 'Hello'" → "dikhao 'Namaste'").
+- **RocketLang Command**: `train ai: suggest "show 'Hello'" for user sailor_123`
+- **JavaScript Equivalent (Placeholder)**:
+  ```javascript
+  async function trainAI() {
+    const model = tf.sequential();
+    model.add(tf.layers.dense({ units: 10, inputShape: [5] }));
+    model.compile({ optimizer: 'sgd', loss: 'meanSquaredError' });
+    const trainingData = await fetchUserData('sailor_123'); // Placeholder for user data
+    await model.fit(trainingData.xs, trainingData.ys, { epochs: 10 });
+    const suggestion = model.predict(tf.tensor2d([[/* input */]]));
+    console.log(`Suggested: dikhao 'Namaste'`);
   }
