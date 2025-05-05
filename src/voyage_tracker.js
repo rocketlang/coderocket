@@ -1,4 +1,4 @@
-// Voyage Tracker Demo - Native RocketLang Integration with Navigation
+// Voyage Tracker Demo - Native RocketLang with Noon Report and Voyage Plan
 // Date: May 7, 2025
 const Database = require('better-sqlite3');
 const db = new Database('C:/CodeRocket/src/rocketlang.db');
@@ -86,9 +86,8 @@ function simulateNoonPosition(start, end, speed, day, startTime, method = "great
     return { lat, lon, eta, name: `En route to ${end.name}` };
 }
 
-// RocketLang parser (ported from test_parser.py)
+// RocketLang parser
 function parseRocketLang(code) {
-    // Handle variable manipulation
     if (code.includes("set") && code.includes("to")) {
         const parts = code.split(" to ");
         const variable = parts[0].split(" ")[1];
@@ -101,24 +100,16 @@ function parseRocketLang(code) {
         const value = parseInt(parts[0].split(" ")[1]);
         return { action: "add", variable, value };
     }
-
-    // Handle display commands
     if (code.includes("show") || code.includes("dikhao")) {
         const value = code.match(/"(.*?)"/)[1];
         return { action: "display", value };
     }
-
-    // Handle function creation
     if (code.includes("make function")) {
         return { action: "function", name: code.split(":")[0].split(" ")[2] };
     }
-
-    // Handle animation
     if (code.includes("animate")) {
         return { action: "animate", coords: code.split("to")[1].trim() };
     }
-
-    // Handle loops
     if (code.includes("loop")) {
         const parts = code.split(": ");
         const times = parseInt(parts[0].split(" ")[1]);
@@ -138,8 +129,6 @@ function parseRocketLang(code) {
         }
         return { action: "loop", times, command: parseRocketLang(nestedCommand) };
     }
-
-    // Handle conditionals
     if (code.includes("if")) {
         if (code.includes("else")) {
             const condition = code.split(": ")[0].split("if ")[1];
@@ -157,11 +146,25 @@ function parseRocketLang(code) {
             return { action: "if", condition, command: parseRocketLang(command) };
         }
     }
+    if (code.includes("print")) {
+        if (code.includes("noon report")) {
+            return { action: "print_noon_report" };
+        }
+        if (code.includes("voyage plan")) {
+            return { action: "print_voyage_plan" };
+        }
+    }
+    if (code.includes("use")) {
+        if (code.includes("track")) {
+            const [lat, lon] = code.split(" at ")[1].split(',').map(Number);
+            return { action: "use", command: { action: "track", coords: `${lat},${lon}` } };
+        }
+    }
     return null;
 }
 
 // Execute RocketLang commands
-function executeCommand(parsed, state) {
+function executeCommand(parsed, state, context) {
     if (!parsed) return;
     switch (parsed.action) {
         case "set":
@@ -183,17 +186,44 @@ function executeCommand(parsed, state) {
             break;
         case "loop":
             for (let i = 0; i < parsed.times; i++) {
-                executeCommand(parsed.command, state);
+                executeCommand(parsed.command, state, context);
             }
             break;
         case "if":
-            // Simplified condition evaluation (for demo purposes)
             console.log(`Condition checked: ${parsed.condition}`);
-            executeCommand(parsed.command, state);
+            executeCommand(parsed.command, state, context);
             break;
         case "if-else":
             console.log(`Condition checked: ${parsed.condition}`);
-            executeCommand(parsed.if_command || parsed.else_command, state);
+            executeCommand(parsed.if_command || parsed.else_command, state, context);
+            break;
+        case "use":
+            if (parsed.command.action === "track") {
+                const [lat, lon] = parsed.command.coords.split(',').map(Number);
+                navigation.trackShip(lat, lon);
+            }
+            break;
+        case "print_noon_report":
+            const { day, noonPosition, heading, distance, speed, weather } = context;
+            console.log(`=== Noon Report - Day ${day} (${noonPosition.timezone || "IST"}) ===`);
+            console.log(`Position: Lat ${noonPosition.lat.toFixed(4)}°N, Lon ${noonPosition.lon.toFixed(4)}°E (${noonPosition.name})`);
+            console.log(`Heading: ${heading.toFixed(2)}° (${context.method === "great-circle" ? "Great Circle" : "Rhumb Line"})`);
+            console.log(`Distance to Next Waypoint: ${distance.toFixed(2)} NM`);
+            console.log(`Speed: ${speed} knots`);
+            console.log(`ETA: ${noonPosition.eta ? noonPosition.eta.toLocaleString() : "Arrived"}`);
+            console.log(`Weather: Wind ${weather.windSpeed} knots from ${weather.windDir}, Sea State: ${weather.seaState}, Temp: ${weather.temp}°C`);
+            console.log("=================================");
+            break;
+        case "print_voyage_plan":
+            console.log("=== Voyage Plan ===");
+            context.waypoints.forEach((wp, index) => {
+                console.log(`Waypoint ${index + 1}: ${wp.name} (Lat ${wp.lat}°N, Lon ${wp.lon}°E, Timezone: ${wp.timezone})`);
+            });
+            console.log(`Total Distance: ${context.totalDistance.toFixed(2)} NM (${context.method === "great-circle" ? "Great Circle" : "Rhumb Line"})`);
+            const totalTimeHours = context.totalDistance / speed;
+            const endTime = new Date(startTime.getTime() + totalTimeHours * 60 * 60 * 1000);
+            console.log(`Estimated Journey Time: ${totalTimeHours.toFixed(2)} hours (End: ${endTime.toLocaleString()})`);
+            console.log("==================");
             break;
     }
 }
@@ -208,12 +238,12 @@ function initVoyageTracker() {
         { lat: 18.9388, lon: 72.8355, name: "Mumbai Port", timezone: "IST" }
     ];
 
-    const speed = 15; // Speed in knots
+    const speed = 15;
     const startTime = new Date("2025-05-07T00:00:00+05:30");
     const method = "great-circle";
     let currentPosition = waypoints[0];
     let totalDistance = 0;
-    let state = { speed: 15, cargo: 150 }; // Initial state
+    let state = { speed: 15, cargo: 150 };
 
     // Create table for journey log
     db.prepare('CREATE TABLE IF NOT EXISTS journey_log (id INTEGER PRIMARY KEY, day INTEGER, waypoint TEXT, lat REAL, lon REAL, heading REAL, distance REAL, speed REAL, eta TEXT, wind_speed REAL, wind_dir TEXT, sea_state TEXT, temp REAL)').run();
@@ -223,11 +253,12 @@ function initVoyageTracker() {
         "set speed to 15",
         "set cargo to 150",
         "show 'Starting Journey!' on screen",
-        "dikhao 'Yatra Shuru!' on screen"
+        "dikhao 'Yatra Shuru!' on screen",
+        "print voyage plan"
     ];
     initialCommands.forEach(cmd => {
         const parsed = parseRocketLang(cmd);
-        executeCommand(parsed, state);
+        executeCommand(parsed, state, { waypoints, totalDistance: 0, method, startTime });
     });
 
     // Simulate journey over 3 days
@@ -238,30 +269,20 @@ function initVoyageTracker() {
         const distance = method === "great-circle" ? calculateGreatCircleDistance(currentPosition.lat, currentPosition.lon, nextWaypoint.lat, nextWaypoint.lon) : calculateRhumbLineDistance(currentPosition.lat, currentPosition.lon, nextWaypoint.lat, nextWaypoint.lon);
         totalDistance += distance;
 
-        // Get weather at the current position
         const weather = getWeather(noonPosition.name.includes("En route") ? nextWaypoint.name : noonPosition.name, day);
 
-        // Log noon report
-        console.log(`\nNoon Report - Day ${day} (${noonPosition.timezone || "IST"}):`);
-        console.log(`Position: Lat ${noonPosition.lat.toFixed(4)}°N, Lon ${noonPosition.lon.toFixed(4)}°E (${noonPosition.name})`);
-        console.log(`Heading: ${heading.toFixed(2)}° (${method === "great-circle" ? "Great Circle" : "Rhumb Line"})`);
-        console.log(`Distance to Next Waypoint: ${distance.toFixed(2)} NM`);
-        console.log(`Speed: ${speed} knots`);
-        console.log(`ETA: ${noonPosition.eta ? noonPosition.eta.toLocaleString() : "Arrived"}`);
-        console.log(`Weather: Wind ${weather.windSpeed} knots from ${weather.windDir}, Sea State: ${weather.seaState}, Temp: ${weather.temp}°C`);
-
-        // Execute RocketLang commands for navigation
         const navigationCommands = [
+            `print noon report`,
             `loop 2 times: show "Checking Position: ${noonPosition.lat.toFixed(2)}, ${noonPosition.lon.toFixed(2)}"`,
             `if cargo > 100 and speed < 20: show "Heavy Load, Slow Speed!"`,
-            "add 5 to cargo"
+            "add 5 to cargo",
+            `use module navigation: track ship at ${noonPosition.lat.toFixed(2)},${noonPosition.lon.toFixed(2)}`
         ];
         navigationCommands.forEach(cmd => {
             const parsed = parseRocketLang(cmd);
-            executeCommand(parsed, state);
+            executeCommand(parsed, state, { day, noonPosition, heading, distance, speed, weather, method, waypoints, totalDistance });
         });
 
-        // Store in database
         const stmt = db.prepare('INSERT INTO journey_log (day, waypoint, lat, lon, heading, distance, speed, eta, wind_speed, wind_dir, sea_state, temp) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)');
         stmt.run(day, noonPosition.name, noonPosition.lat, noonPosition.lon, heading, distance, speed,
             noonPosition.eta ? noonPosition.eta.toISOString() : "Arrived", weather.windSpeed, weather.windDir, weather.seaState, weather.temp);

@@ -1,0 +1,2 @@
+{"input": "show Hello", "output": "show \"Hello\""}
+{"input": "schedule shift morning for Anil", "output": "schedule shift morning for Anil"}
