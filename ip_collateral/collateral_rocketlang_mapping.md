@@ -96,3 +96,13 @@ RocketLang will include an API framework to enable seamless integration with ext
   });
 
   app.listen(3000, () => console.log('RocketLang API running on port 3000'));
+- ### Auth0 (Interim Authentication for Beta)
+- **Use Case**: Enable user authentication for 50-user beta test (Aug 2025).
+- **RocketLang Command**: `sign up user sailor_123 with email sailor123@example.com`
+- **JavaScript Equivalent (Placeholder)**:
+  ```javascript
+  async function signUpUser(email) {
+    const { user, error } = await supabase.auth.signUp({ email, password: 'default123' });
+    if (error) console.log(error);
+    return user;
+  }
