@@ -1,7 +1,7 @@
 ﻿# RocketLang Functionality Mapping and Frameworks
 
 **Date**: May 7, 2025  
-**Purpose**: This document maps RocketLang commands to Python and JavaScript equivalents, demonstrating how laymen can create apps with RocketLang, and highlights helpful frameworks for extending RocketLang functionality.
+**Purpose**: This document maps RocketLang commands to Python and JavaScript equivalents, demonstrating how laymen can create apps with RocketLang, highlights helpful frameworks for extending RocketLang functionality, and tracks Demo App updates.
 
 ## RocketLang to Python/JavaScript Mapping
 
@@ -44,65 +44,15 @@ RocketLang is designed for laymen (e.g., sailors, shopkeepers) to create apps us
 
 ## Helpful Frameworks for RocketLang Apps
 
-RocketLang apps can be extended with frameworks to add advanced functionality. Below are frameworks integrated into CodeRocket (per `tech_stack.md`).
+RocketLang apps can be extended with frameworks to add advanced functionality. Below are frameworks integrated into CodeRocket.
 
 ### Supabase (Cloud Database)
-- **Use Case**: Store user data (e.g., sailor journey logs) during the beta test (Aug 2025).
-- **RocketLang Command**: `make function store_log: connect supabase_api`
-- **JavaScript Equivalent**: 
+- **Use Case**: Store user data (e.g., sailor journey logs) during the beta test (Aug 2025).  
+- **RocketLang Command**: `make function store_log: connect supabase_api`  
+- **JavaScript Equivalent**:  
   ```javascript
   async function store_log() {
     const { data, error } = await supabase.from('journey_log').insert({ day: 1, lat: 22.7394, lon: 69.6872 });
     if (error) console.log(error);
     return data;
-  }
-  ## AI Layer for RocketLang (Planned)
-
-### Overview
-RocketLang aims to integrate an AI layer to assist laymen in generating commands and apps. The AI will be trained on RocketLang syntax and user inputs (e.g., sailor journey logs, shopkeeper inventory commands) to suggest commands, auto-generate apps, and provide real-time feedback. This feature is planned post-December 2025 funding, with initial training on a small dataset (e.g., 50-user beta data, Aug 2025).
-
-### Framework: TensorFlow.js (Placeholder)
-- **Use Case**: Train a lightweight AI model in the browser to suggest RocketLang commands (e.g., "show 'Hello'" → "dikhao 'Namaste'").
-- **RocketLang Command**: `train ai: suggest "show 'Hello'" for user sailor_123`
-- **JavaScript Equivalent (Placeholder)**:
-  ```javascript
-  async function trainAI() {
-    const model = tf.sequential();
-    model.add(tf.layers.dense({ units: 10, inputShape: [5] }));
-    model.compile({ optimizer: 'sgd', loss: 'meanSquaredError' });
-    const trainingData = await fetchUserData('sailor_123'); // Placeholder for user data
-    await model.fit(trainingData.xs, trainingData.ys, { epochs: 10 });
-    const suggestion = model.predict(tf.tensor2d([[/* input */]]));
-    console.log(`Suggested: dikhao 'Namaste'`);
-  }
-  ## API Framework for RocketLang (Planned)
-
-### Overview
-RocketLang will include an API framework to enable seamless integration with external apps and modules (e.g., payment gateways, IoT devices, third-party maritime apps). This framework will allow laymen to connect RocketLang apps to other systems using simple commands, while providing developers with a structured API for extensibility. The API framework will be developed post-beta (2026), with initial support for RESTful APIs.
-
-### Framework: Express.js (Placeholder)
-- **Use Case**: Create a RESTful API to expose RocketLang app functionality (e.g., journey logs, user data) to external apps.
-- **RocketLang Command**: `make api endpoint logs: return journey_data`
-- **JavaScript Equivalent (Placeholder)**:
-  ```javascript
-  const express = require('express');
-  const app = express();
-  app.use(express.json());
-
-  app.get('/logs', (req, res) => {
-    const db = require('better-sqlite3')('rocketlang.db');
-    const journeyData = db.prepare('SELECT * FROM journey_log').all();
-    res.json(journeyData);
-  });
-
-  app.listen(3000, () => console.log('RocketLang API running on port 3000'));
-- ### Auth0 (Interim Authentication for Beta)
-- **Use Case**: Enable user authentication for 50-user beta test (Aug 2025).
-- **RocketLang Command**: `sign up user sailor_123 with email sailor123@example.com`
-- **JavaScript Equivalent (Placeholder)**:
-  ```javascript
-  async function signUpUser(email) {
-    const { user, error } = await supabase.auth.signUp({ email, password: 'default123' });
-    if (error) console.log(error);
-    return user;
   }

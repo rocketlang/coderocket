@@ -1,2 +1,13 @@
-{"input": "show Hello", "output": "show \"Hello\""}
+{
+  "input": "show Hello",
+  "output": "show \"Hello\""
+}
+{"input": "dikhao Namaste", "output": "dikhao \"Namaste\""}
 {"input": "schedule shift morning for Anil", "output": "schedule shift morning for Anil"}
+{"input": "tell me the weather", "output": "show \"Weather: Wind 14 knots from SW\""}
+{"input": "create project Logistics", "output": "create project Logistics"}
+{"input": "process order for \"Rice\"", "output": "process order for \"Rice\""}
+{"input": "schedule exam Grade 5 Math on 2025-05-10", "output": "schedule exam Grade 5 Math on 2025-05-10"}
+{"input": "loop 3 times: show Hi", "output": "loop 3 times: show \"Hi\""}
+{"input": "if score > 5: show Win", "output": "if score > 5: show \"Win\""}
+{"input": "make function pay: connect razorpay_api", "output": "make function pay: connect razorpay_api"}
