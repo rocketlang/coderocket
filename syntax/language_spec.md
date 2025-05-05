@@ -24,3 +24,7 @@ This document details the patent-pending CodeRocket language syntax for IP colla
 ## Next Steps
 - Finalize collateral for patent (June 2025).
 - Test with beta users (August 2025).
+## Control Flow Commands
+- Spark: loop 5 times: show "Counting" → for (let i = 0; i < 5; i++) { console.log("Counting"); }
+- Orbit: if cargo > 100: show "Heavy" → if (cargo > 100) { console.log("Heavy"); }
+- Nova: if ship at 200,200: animate to 300,300 else: show "Off Course" → if (ship.x === 200 && ship.y === 200) { animate(300, 300); } else { console.log("Off Course"); }
