@@ -56,3 +56,103 @@ RocketLang apps can be extended with frameworks to add advanced functionality. B
     if (error) console.log(error);
     return data;
   }
+TensorFlow.js (AI Layer Placeholder)
+Use Case: Train a lightweight AI model in the browser to suggest RocketLang commands (e.g., "show 'Hello'" → "dikhao 'Namaste'").
+RocketLang Command: train ai: suggest "show 'Hello'" for user sailor_123
+JavaScript Equivalent (Placeholder):
+javascript
+
+Copy
+async function trainAI() {
+  const model = tf.sequential();
+  model.add(tf.layers.dense({ units: 10, inputShape: [5] }));
+  model.compile({ optimizer: 'sgd', loss: 'meanSquaredError' });
+  const trainingData = await fetchUserData('sailor_123'); // Placeholder for user data
+  await model.fit(trainingData.xs, trainingData.ys, { epochs: 10 });
+  const suggestion = model.predict(tf.tensor2d([[/* input */]]));
+  console.log(`Suggested: dikhao 'Namaste'`);
+}
+API Framework for RocketLang (Planned)
+Overview
+RocketLang will include an API framework to enable seamless integration with external apps and modules (e.g., payment gateways, IoT devices, third-party maritime apps). This framework will allow laymen to connect RocketLang apps to other systems using simple commands, while providing developers with a structured API for extensibility. The API framework will be developed post-beta (2026), with initial support for RESTful APIs.
+
+Framework: Express.js (Placeholder)
+Use Case: Create a RESTful API to expose RocketLang app functionality (e.g., journey logs, user data) to external apps.
+RocketLang Command: make api endpoint logs: return journey_data
+JavaScript Equivalent (Placeholder):
+javascript
+
+Copy
+const express = require('express');
+const app = express();
+app.use(express.json());
+
+app.get('/logs', (req, res) => {
+  const db = require('better-sqlite3')('rocketlang.db');
+  const journeyData = db.prepare('SELECT * FROM journey_log').all();
+  res.json(journeyData);
+});
+
+app.listen(3000, () => console.log('RocketLang API running on port 3000'));
+Auth0 (Interim Authentication for Beta)
+Use Case: Enable user authentication for 50-user beta test (Aug 2025).
+RocketLang Command: sign up user sailor_123 with email sailor123@example.com
+JavaScript Equivalent (Placeholder):
+javascript
+
+Copy
+async function signUpUser(email) {
+  const { user, error } = await supabase.auth.signUp({ email, password: 'default123' });
+  if (error) console.log(error);
+  return user;
+}
+Demo App Updates
+Voyage Tracker Commands
+Use Case: Manages maritime voyages.
+RocketLang Command: print voyage plan
+JavaScript Equivalent:
+text
+
+Copy
+waypoints.forEach(wp => console.log(`- Waypoint: ${wp.name}, Distance: ${wp.distance} nm, Sea State: ${wp.seaState}`));
+Update on 2025-05-05: Showcased printing features: print voyage plan, print crew update.
+Update on 2025-05-06: Enhanced Voyage Tracker with weather API and Shift Scheduler module.
+Shift Scheduler Commands
+Use Case: Manages shifts and tasks, reusable in other apps.
+RocketLang Command: schedule shift morning for Anil
+JavaScript Equivalent:
+text
+
+Copy
+shiftScheduler.scheduleShift("Anil", "morning", "2025-05-08T06:00:00", "2025-05-08T14:00:00");
+Update on 2025-05-05: Integrated Shift Scheduling App as core module with real-world complexity.
+Project Management Commands
+Use Case: Manages projects, reuses School App scheduling.
+RocketLang Command: create project Logistics
+JavaScript Equivalent:
+text
+
+Copy
+projectManagement.createProject("Logistics");
+Update on 2025-05-05: Added modular strategy for Project Management App.
+E-Commerce Commands
+Use Case: Manages online stores, reuses Shift Scheduler for delivery staff.
+RocketLang Command: process order for "Rice"
+JavaScript Equivalent:
+text
+
+Copy
+ecommerce.processOrder(productId, quantity);
+Update on 2025-05-05: Integrated Shift Scheduler for delivery staff scheduling.
+School App Commands
+Use Case: Manages school functions, reusable for scheduling.
+RocketLang Command: schedule exam Grade 5 Math on 2025-05-10
+JavaScript Equivalent:
+text
+
+Copy
+school.scheduleExam("Grade 5", "Math", "2025-05-10");
+Update on 2025-05-05: Added as core module, reusable in Project Management.
+Update on 2025-05-06: Added LLM demo data placeholder for beta test: Collect inputs like "schedule shift morning for Anil" for training.
+Process Update on 2025-05-07
+Added process update automation to streamline file updates.
