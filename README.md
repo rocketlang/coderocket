@@ -1,2 +1,2 @@
 # coderocket
-CodeRocket: A low/no-code platform powered by RocketLang, enabling laymen and students to build apps with ease.
+CodeRocket is a revolutionary AI-first platform that empowers laymen—like Captain Anil Sharma—to create functional apps using plain language and intuitive commands. Built 98% by AI (ChatGPT, Grok, DistilBERT, Mistral), and guided by just 2% human input, it eliminates the need for programming knowledge. RocketLang, the platform's near-natural DSL, makes logic readable and modifiable by anyone. With multilingual, voice, and icon-based access, CodeRocket makes digital creation as simple as conversation.
